@@ -32,6 +32,7 @@ def main():
             "nb_tentatives": 0,
             "historique": [],
             "documents": None,
+            "erreur": False,
         }
 
         # Exécuter le workflow

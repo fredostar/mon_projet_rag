@@ -19,8 +19,12 @@ class RagState(TypedDict):
         nb_tentatives (int): Nombre de tentatives de génération/amélioration.
         historique (List[str]): Liste des réponses générées à chaque tentative 
             (pour le débogage ou l'audit).
-        documents (Optional[List[str]]): Liste des contenus des documents 
+        documents (Optional[List[str]]): Liste des contenus des documents
             utilisés pour générer le contexte.
+        erreur (bool): Indique si le dernier nœud exécuté (recherche,
+            génération ou amélioration) a échoué. Utilisé par le routage
+            conditionnel du graphe pour arrêter le workflow proprement
+            plutôt que d'inspecter le texte de la réponse.
     """
     question: str
     contexte: str
@@ -28,3 +32,4 @@ class RagState(TypedDict):
     nb_tentatives: int
     historique: List[str]  # Pour le débogage
     documents: Optional[List[str]]  # Liste des documents utilisés
+    erreur: bool

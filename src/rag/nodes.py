@@ -165,19 +165,22 @@ def rechercher_contexte(state: RagState) -> Dict[str, Any]:
         )
         return {
             "contexte": contexte,
-            "documents": [doc.page_content for doc in documents]
+            "documents": [doc.page_content for doc in documents],
+            "erreur": False,
         }
     except RetrieverError as e:
         warnings.warn(f"⚠️ Échec de la recherche de contexte: {str(e)}")
         return {
-            "contexte": f"[ERREUR] Impossible de récupérer le contexte: {str(e)}",
-            "documents": []
+            "contexte": f"Impossible de récupérer le contexte: {str(e)}",
+            "documents": [],
+            "erreur": True,
         }
     except Exception as e:
         warnings.warn(f"⚠️ Erreur inattendue lors de la recherche de contexte: {str(e)}")
         return {
-            "contexte": f"[ERREUR] Erreur inattendue: {str(e)}",
-            "documents": []
+            "contexte": f"Erreur inattendue: {str(e)}",
+            "documents": [],
+            "erreur": True,
         }
 
 
@@ -200,6 +203,14 @@ def generer_reponse(state: RagState) -> Dict[str, Any]:
         - L'historique est mis à jour pour tracer toutes les tentatives.
         - En cas d'erreur, retourne une réponse avec un message d'erreur.
     """
+    if state.get("erreur"):
+        # Le contexte n'a pas pu être récupéré : inutile d'appeler le LLM.
+        return {
+            "reponse": f"Impossible de générer une réponse : {state['contexte']}",
+            "nb_tentatives": state.get("nb_tentatives", 0) + 1,
+            "historique": state.get("historique", []) + [f"Tentative {state.get('nb_tentatives', 0) + 1}: Échec (contexte indisponible)"],
+            "erreur": True,
+        }
     try:
         prompt = (
             "Tu es un assistant expert en RAG. Réponds à la question suivante "
@@ -213,20 +224,23 @@ def generer_reponse(state: RagState) -> Dict[str, Any]:
             "reponse": reponse.content,
             "nb_tentatives": state.get("nb_tentatives", 0) + 1,
             "historique": state.get("historique", []) + [f"Tentative {state.get('nb_tentatives', 0) + 1}: {reponse.content}"],
+            "erreur": False,
         }
     except (ModelRateLimitError, ModelAuthenticationError) as e:
         warnings.warn(f"⚠️ Erreur API MistralAI: {str(e)}")
         return {
-            "reponse": f"[ERREUR] Problème avec l'API MistralAI: {str(e)}. Vérifiez votre clé API ou attendez avant de réessayer.",
+            "reponse": f"Problème avec l'API MistralAI: {str(e)}. Vérifiez votre clé API ou attendez avant de réessayer.",
             "nb_tentatives": state.get("nb_tentatives", 0) + 1,
             "historique": state.get("historique", []) + [f"Tentative {state.get('nb_tentatives', 0) + 1}: Échec (erreur API)"],
+            "erreur": True,
         }
     except Exception as e:
         warnings.warn(f"⚠️ Erreur inattendue lors de la génération de la réponse: {str(e)}")
         return {
-            "reponse": f"[ERREUR] Impossible de générer une réponse: {str(e)}",
+            "reponse": f"Impossible de générer une réponse: {str(e)}",
             "nb_tentatives": state.get("nb_tentatives", 0) + 1,
             "historique": state.get("historique", []) + [f"Tentative {state.get('nb_tentatives', 0) + 1}: Échec (erreur inattendue)"],
+            "erreur": True,
         }
 
 
@@ -264,18 +278,21 @@ def ameliorer_reponse(state: RagState) -> Dict[str, Any]:
             "reponse": reponse.content,
             "nb_tentatives": state["nb_tentatives"] + 1,
             "historique": state.get("historique", []) + [f"Amélioration {state['nb_tentatives'] + 1}: {reponse.content}"],
+            "erreur": False,
         }
     except (ModelRateLimitError, ModelAuthenticationError) as e:
         warnings.warn(f"⚠️ Erreur API MistralAI lors de l'amélioration: {str(e)}")
         return {
-            "reponse": f"[ERREUR] Problème avec l'API MistralAI: {str(e)}. Impossible d'améliorer la réponse.",
+            "reponse": f"Problème avec l'API MistralAI: {str(e)}. Impossible d'améliorer la réponse.",
             "nb_tentatives": state["nb_tentatives"] + 1,
             "historique": state.get("historique", []) + [f"Amélioration {state['nb_tentatives'] + 1}: Échec (erreur API)"],
+            "erreur": True,
         }
     except Exception as e:
         warnings.warn(f"⚠️ Erreur inattendue lors de l'amélioration de la réponse: {str(e)}")
         return {
-            "reponse": f"[ERREUR] Impossible d'améliorer la réponse: {str(e)}",
+            "reponse": f"Impossible d'améliorer la réponse: {str(e)}",
             "nb_tentatives": state["nb_tentatives"] + 1,
             "historique": state.get("historique", []) + [f"Amélioration {state['nb_tentatives'] + 1}: Échec (erreur inattendue)"],
+            "erreur": True,
         }

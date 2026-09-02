@@ -17,7 +17,7 @@ Un **workflow RAG (Retrieval-Augmented Generation)** construit avec **LangChain*
 ## 🛠 Prérequis
 
 - **Python** >= 3.13 (recommandé : 3.13+)
-- **Clé API MistralAI** (gratuite pour les tests : [s'inscrire ici](https://mistral.ai/))
+- **Clé API MistralAI** 
 - **Git** (pour cloner le projet)
 
 ---

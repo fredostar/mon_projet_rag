@@ -36,14 +36,13 @@ def reponse_est_valide(state: RagState) -> Literal["ameliorer", "terminer"]:
         Une réponse est considérée comme insuffisante si :
         - Elle contient moins de 10 mots.
         - Elle contient l'expression "je ne sais pas" (insensible à la casse).
-        - Elle contient le mot "[ERREUR]" (indiquant une erreur dans le workflow).
 
-        Si une erreur irréparable est détectée (ex: problème API persistant), 
-        le workflow se termine pour éviter une boucle infinie.
+        Si le champ `erreur` du state est à True (échec de la recherche de
+        contexte, de la génération ou de l'amélioration), le workflow se
+        termine directement pour éviter une boucle inutile.
     """
-    # Vérifier si la réponse contient une erreur irréparable
-    if "[ERREUR]" in state["reponse"]:
-        warnings.warn(f"⚠️ Erreur détectée dans la réponse: {state['reponse']}")
+    if state.get("erreur"):
+        warnings.warn(f"⚠️ Erreur détectée dans le workflow, arrêt: {state['reponse']}")
         return "terminer"
 
     reponse_insuffisante = (
