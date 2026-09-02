@@ -1,9 +1,26 @@
+"""
+Point d'entrée principal pour l'application RAG.
+
+Ce module lance une interface CLI interactive permettant à l'utilisateur
+de poser des questions sur les documents indexés et d'obtenir des réponses
+générées par le workflow RAG.
+"""
+
 from rag.graph import app
 from rag.state import RagState
 
 
 def main():
-    """Exécute le workflow RAG."""
+    """
+    Exécute le workflow RAG en mode interactif.
+
+    Ce programme :
+    1. Demande à l'utilisateur de poser une question.
+    2. Initialise l'état du workflow avec la question.
+    3. Exécute le graphe LangGraph pour obtenir une réponse.
+    4. Affiche la réponse, le contexte utilisé et l'historique des tentatives.
+    5. Répète jusqu'à ce que l'utilisateur tape 'quit'.
+    """
     question = input("Posez votre question (ou 'quit' pour quitter) : ")
 
     while question.lower() != "quit":
