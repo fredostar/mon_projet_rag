@@ -1,7 +1,39 @@
 [project]
 name = "mon-projet-rag"
 version = "0.1.0"
-description = "Add your description here"
+description = "Un workflow RAG avec LangChain, LangGraph et Mistral"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+authors = [
+    { name = "Frédéric Radigoy", email = "dev@frederic-radigoy.fr" }
+]
+
+# Dépendances principales
+dependencies = [
+    "langchain>=0.2.0",
+    "langgraph>=0.0.10",
+    "mistralai>=0.3.0",
+    "chromadb>=0.4.0",
+    "pypdf>=4.0.0",
+    "sentence-transformers>=2.2.2",
+    "duckduckgo-search>=5.3.0",
+    "uv>=0.1.0",  # Pour la gestion des dépendances (optionnel)
+    "python-dotenv>=1.2.3",
+    "langchain-mistralai>=1.1.6",
+    "langchain-chroma>=1.1.0",
+    "langchain-community>=0.4.2",
+    "langchain-text-splitters>=1.1.2",
+]
+
+# Dépendances de développement
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+]
+
+# Configuration de uv (optionnel)
+[tool.uv]
+dev-dependencies = ["pytest", "black", "ruff"]
