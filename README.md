@@ -4,7 +4,7 @@ Un **workflow RAG (Retrieval-Augmented Generation)** construit avec **LangChain*
 
 ---
 
-## 📌 Fonctionnalités
+## Fonctionnalités
 
 - **Indexation de documents PDF** : Charge et découpe automatiquement les PDF en chunks pour une recherche optimale.
 - **Recherche sémantique** : Utilise des **embeddings MistralAI** et **ChromaDB** pour trouver les passages pertinents.
@@ -14,7 +14,7 @@ Un **workflow RAG (Retrieval-Augmented Generation)** construit avec **LangChain*
 
 ---
 
-## 🛠 Prérequis
+## Prérequis
 
 - **Python** >= 3.13 (recommandé : 3.13+)
 - **Clé API MistralAI** 
@@ -22,7 +22,7 @@ Un **workflow RAG (Retrieval-Augmented Generation)** construit avec **LangChain*
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### 1. Cloner le dépôt
 ```bash
@@ -50,7 +50,7 @@ pip install -e .
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### 1. Créer un fichier `.env` à la racine du projet
 ```bash
@@ -74,7 +74,7 @@ MAX_TOKENS=1000
 TEMPERATURE=0.3
 ```
 
-> ⚠️ **Ne commite jamais ton `.env` dans git !** Il est déjà ignoré via `.gitignore`.
+>  **Ne commite jamais ton `.env` dans git !** Il est déjà ignoré via `.gitignore`.
 
 ### 3. Placer ton PDF
 Par défaut, le projet utilise `data/documents.pdf`. Tu peux :
@@ -83,7 +83,7 @@ Par défaut, le projet utilise `data/documents.pdf`. Tu peux :
 
 ---
 
-## 🎯 Utilisation
+## Utilisation
 
 ### Lancer le workflow RAG en mode interactif
 ```bash
@@ -116,7 +116,7 @@ Posez une autre question (ou 'quit' pour quitter) :
 
 ---
 
-## 📂 Structure du projet
+## Structure du projet
 
 ```
 mon_projet_rag/
@@ -139,7 +139,7 @@ mon_projet_rag/
 
 ---
 
-## 🔧 Personnalisation
+## Personnalisation
 
 ### Changer le modèle Mistral
 Modifie `src/rag/nodes.py` :
@@ -173,7 +173,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 
 ---
 
-## 🧪 Tests
+##  Tests
 
 *(À venir : tests unitaires pour les nœuds et le graphe.)*
 
